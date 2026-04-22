@@ -19,6 +19,7 @@ interface Event {
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showAll, setShowAll] = useState(false);
   const categories = ['All', 'Technology', 'Music', 'Business', 'Arts'];
 
   const eventsData: Event[] = [
@@ -171,8 +172,9 @@ export default function Home() {
               </div>
               )}
         </section>
+
       </main>
-      
+
       <Footer />
 
       <style jsx global>{`

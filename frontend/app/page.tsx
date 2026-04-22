@@ -84,6 +84,7 @@ export default function Home() {
       </header>
 
       <main className="pt-32 pb-20 bg-white">
+        {/* Hero Section - Matching typography exactly */}
         <section className="px-6 text-center max-w-3xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-extrabold text-black leading-tight mb-4">
             Discover Experiences That Matter.
@@ -92,6 +93,7 @@ export default function Home() {
             Book tickets to the best tech meetups, concerts, and workshops near you.
           </p>
 
+          {/* Search Bar - Matching the specific shadow and padding */}
           <div className="relative w-full max-w-2xl mx-auto mb-12">
             <div className="relative flex items-center bg-white dark:bg-zinc-900 rounded-full p-2 shadow-xl border border-slate-100 dark:border-zinc-800">
               <div className="pl-4 pr-2 text-slate-400">
@@ -118,6 +120,7 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Filter Bar - Matching horizontal scroll and specific button states */}
           <div className="flex justify-center gap-3 overflow-x-auto no-scrollbar mb-16">
             {categories.map((category) => (
               <button
@@ -135,6 +138,7 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Featured Events Section */}
         <section className="px-6 max-w-xl mx-auto space-y-8">
           <div className="flex justify-between items-end mb-2">
             <h2 className="text-2xl font-bold text-black tracking-tight">
@@ -160,10 +164,22 @@ export default function Home() {
               ))
             ) : null}
           </div>
+
+          {filteredEvents.length === 0 && (
+            <div className="text-center py-20 text-[#777587]">
+              No events found in this category
+              </div>
+              )}
         </section>
       </main>
       
       <Footer />
+
+      <style jsx global>{`
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+      
     </div>
   );
 }

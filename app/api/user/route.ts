@@ -9,7 +9,7 @@ const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_AN
 export async function GET() {
   try {
     // 1. Grab the secure cookie
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('sb-access-token')?.value;
 
     if (!token) throw new Error("Not logged in");

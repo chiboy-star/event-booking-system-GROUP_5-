@@ -1,6 +1,8 @@
 // app/api/auth/login/route.ts
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { cookies } from 'next/headers';
+
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -18,6 +20,14 @@ export async function POST(request: Request) {
     });
 
     if (error) throw error;
+
+    const cookieStore = await cookies();
+cookieStore.set('sb-access-token', data.session.access_token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'lax',
+  maxAge: 60 * 60 * 24 * 7, // 1 week
+});
 
     return NextResponse.json({ 
       success: true, 

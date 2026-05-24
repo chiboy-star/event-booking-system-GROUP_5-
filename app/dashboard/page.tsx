@@ -11,7 +11,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   
   // Organizer Form State
-  const [eventData, setEventData] = useState({ title: "", date: "", location: "", price: "0" });
+  const [eventData, setEventData] = useState({ title: "", date: "", location: "", price: "0",description: "" });
   const [creating, setCreating] = useState(false);
 
   // 1. Fetch the user profile on load
@@ -50,7 +50,7 @@ export default function DashboardPage() {
       
       if (data.success) {
         alert("Event created successfully! 🎉");
-        setEventData({ title: "", date: "", location: "", price: "0" });
+        setEventData({ title: "", date: "", location: "", price: "0" ,description: ""});
       }
     } catch (err) {
       alert("Failed to create event.");
@@ -84,6 +84,9 @@ if (loading || !user) return <div className="min-h-screen flex items-center just
             <form onSubmit={handleCreateEvent} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input required type="text" placeholder="Event Title" value={eventData.title} onChange={(e) => setEventData({...eventData, title: e.target.value})} className="w-full px-4 py-3 bg-[#f2f4f6] rounded-xl outline-none focus:ring-2 focus:ring-[#3525cd]/30" />
+                
+                <input required type="text" placeholder="Short Description" value={eventData.description} onChange={(e) => setEventData({...eventData, description: e.target.value})} className="w-full px-4 py-3 bg-[#f2f4f6] rounded-xl outline-none focus:ring-2 focus:ring-[#3525cd]/30" />
+                
                 <input required type="datetime-local" value={eventData.date} onChange={(e) => setEventData({...eventData, date: e.target.value})} className="w-full px-4 py-3 bg-[#f2f4f6] rounded-xl outline-none focus:ring-2 focus:ring-[#3525cd]/30" />
                 <input required type="text" placeholder="Location (e.g., Lagos Hub)" value={eventData.location} onChange={(e) => setEventData({...eventData, location: e.target.value})} className="w-full px-4 py-3 bg-[#f2f4f6] rounded-xl outline-none focus:ring-2 focus:ring-[#3525cd]/30" />
                 <input required type="number" placeholder="Price ($)" value={eventData.price} onChange={(e) => setEventData({...eventData, price: e.target.value})} className="w-full px-4 py-3 bg-[#f2f4f6] rounded-xl outline-none focus:ring-2 focus:ring-[#3525cd]/30" />

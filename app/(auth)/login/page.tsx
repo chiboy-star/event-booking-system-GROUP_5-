@@ -52,7 +52,7 @@ export default function LoginPage() {
           <div className="flex items-center justify-center gap-3 mb-8">
             {/* Simple SVG Compass Icon as placeholder */}
             <svg className="w-10 h-10 text-[#dad7ff]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 8l-8 8m0-8l8 8m-4-4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            <span className="text-3xl font-extrabold text-white tracking-tighter">Pulse Events</span>
+            <span className="text-3xl font-extrabold text-white tracking-tighter">TktMaster</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4 leading-tight">
             Discover the <span className="text-[#dad7ff] italic">Extraordinary</span>.

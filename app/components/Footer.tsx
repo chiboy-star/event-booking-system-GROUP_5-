@@ -7,12 +7,12 @@ export default function Footer() {
         
         <Link href="/" className="mb-2">
           <span className="text-2xl font-extrabold text-[#3525cd] tracking-tighter">
-            Pulse
+            TktMaster
           </span>
         </Link>
 
         <p className="text-slate-500 text-sm">
-          © 2026 Pulse Discovery. All rights reserved.
+          © 2026 TktMaster Discovery. All rights reserved.
         </p>
 
       </div>

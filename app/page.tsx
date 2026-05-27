@@ -73,8 +73,8 @@ export default function Home() {
       <header className="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl shadow-sm">
         <nav className="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#3525cd] text-2xl">explore</span>
-            <span className="text-2xl font-extrabold text-[#3525cd] tracking-tighter">Pulse</span>
+            <span className="material-symbols-outlined text-[#3525cd] text-2xl">Tkt</span>
+            <span className="text-2xl font-extrabold text-[#3525cd] tracking-tighter">Master</span>
           </div>
           <div className="flex items-center gap-4">
             <Link href="/login" className="text-slate-600 font-semibold hover:text-[#4d44e3] transition-colors">Login</Link>

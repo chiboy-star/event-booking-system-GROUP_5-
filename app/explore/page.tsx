@@ -8,6 +8,24 @@ export default function ExplorePage() {
   const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const handleRSVP = async (eventId: string) => {
+  try {
+    const res = await fetch("/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ eventId })
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert("Ticket booked successfully! See you there.");
+    } else {
+      alert("Error: " + data.error);
+    }
+  } catch (err) {
+    alert("Please log in to book a ticket.");
+  }
+};
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -65,9 +83,12 @@ export default function ExplorePage() {
                   
                   <div className="pt-4 border-t border-[#eceef0] flex justify-between items-center">
                     <span className="font-extrabold text-xl">{event.price > 0 ? `$${event.price}` : "FREE"}</span>
-                    <button className="px-5 py-2 bg-[#f2f4f6] text-[#191c1e] font-bold rounded-lg hover:bg-[#3525cd] hover:text-white transition-colors">
-                      RSVP
-                    </button>
+                    <button 
+  onClick={() => handleRSVP(event.id)}
+  className="px-5 py-2 bg-[#f2f4f6] text-[#191c1e] font-bold rounded-lg hover:bg-[#3525cd] hover:text-white transition-colors"
+>
+  RSVP
+</button>
                   </div>
                 </div>
               </article>

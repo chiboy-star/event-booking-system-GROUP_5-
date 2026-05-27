@@ -1,13 +1,19 @@
+// app/api/events/[id]/route.ts
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// The { params } object catches the dynamic [id] from the folder name!
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  request: Request, 
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    
+    const resolvedParams = await params;
+
     const event = await prisma.event.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       include: { organizer: { select: { fullName: true, organizationName: true } } }
     });
 

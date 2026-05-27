@@ -72,9 +72,20 @@ if (loading || !user) return <div className="min-h-screen flex items-center just
               Logged in as <span className="font-bold text-[#3525cd] uppercase">{user.role}</span>
             </p>
           </div>
-          <Link href="/explore" className="px-6 py-3 bg-white border border-[#eceef0] rounded-xl font-bold shadow-sm hover:shadow-md transition-all">
-            Explore Events ↗
-          </Link>
+          <div className="flex gap-4">
+            <Link href="/explore" className="px-6 py-3 bg-white border border-[#eceef0] rounded-xl font-bold shadow-sm hover:shadow-md transition-all">
+              Explore ↗
+            </Link>
+            <button 
+              onClick={async () => {
+                await fetch('/api/auth/logout', { method: 'POST' });
+                router.push('/login');
+              }}
+              className="px-6 py-3 text-red-600 bg-red-50 font-bold rounded-xl hover:bg-red-100 transition-all"
+            >
+              Log Out
+            </button>
+          </div>
         </header>
 
         {/* ORGANIZER VIEW */}

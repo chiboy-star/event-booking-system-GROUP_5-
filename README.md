@@ -30,14 +30,14 @@ npm run dev
 http://localhost:3000
 
 ## Team Members
-- Member 1 – Team Lead
-- Member 1 – Frontend
-- Member 2 – Fronyend
-- Member 3 – Backend
-- Member 4 – Backend
+- Madueke Chinemerem – Team Lead
+- Albehu Zhili – Frontend
+- Odoemene Cosmas – Frontend
+- Ezechukwu Jason – Backend
+- Asuputo Kitan – Backend
 - Member 6 – Frontend
 - Nnodim Chukwuka – QA/Documentation
-- Member 8 – QA/Documentation
+- Ogunmoye Oluwatamilore  – QA/Documentation
 
 ## QA Responsibilities
 - Tested application features

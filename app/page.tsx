@@ -1,209 +1,128 @@
+// app/page.tsx
 "use client";
-import Image from "next/image";
-import { useState, useMemo } from 'react';
-import Footer from '@/app/components/Footer';
-import Eventcard from '@/app/components/eventcard';
-import Link from 'next/link';
 
-interface Event {
-  month: string;
-  day: string;
-  title: string;
-  organizer: string;
-  location: string;
-  price: number;
-  imageAlt: string;
-  imageUrl: string;
-  category: string;
-}
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Footer from '@/app/components/Footer';
+import Navbar from "@/app/components/Navbar";
+
+
+// Professional fallback images from Unsplash (Tech, Concerts, Networking)
+const placeholderImages = [
+  "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=800&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1558008258-3256797b43f3?w=800&auto=format&fit=crop&q=80"
+];
 
 export default function Home() {
-  const [activeCategory, setActiveCategory] = useState('All');
-  const [searchQuery, setSearchQuery] = useState('');
-  const categories = ['All', 'Technology', 'Music', 'Business', 'Arts'];
+  const [featuredEvents, setFeaturedEvents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const eventsData: Event[] = [
-    { 
-      month: "OCT",
-      day: "24",
-      title: "Global AI Summit 2024",
-      organizer: "TechNexus Pulse",
-      location: "Innovation Center, San Francisco",
-      price: 50,
-      imageAlt: "AI Summit",
-      imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBEajJfe23vOBRSCUYrZVK_cPJmOqJ87jAGGgUlm9fIb3Norf1-NiaXt7NqIRuKHtODKLfJhEG6qMxifYTI_mLQw_7hXHC7ZAKmMLdmYsJGKPmJ1dLims5CkAlbyevPEji2Zh6LMJIxJpws3I1JJSG9VGFslppcln_-w52FiE9qsnO0-SzOJrJH1BTd1SlEVhwp03W0Pra2YhTwjGryEDyGPWacmRur84_JAw1Ja27uIaAdD_JEfuIX2aUAShgFaV5uTk9nhTdA_hg",
-      category: "Technology"
-    },
-    {
-      month: "OCT",
-      day: "26",
-      title: "Jazz in the Park",
-      organizer: "Echo Entertainment",
-      location: "Central Park, New York",
-      price: 35,
-      imageAlt: "Jazz concert",
-      imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBOh_hDwOrZc-_Fj-dPl-M895_2O0VH3jxTyZyyiVO10swii0kAa0EPwkhwCF4ylU8866PdcCjFDFht3GMocFD9SvH8uQPIxK9DRwSb6zu6zSubabBygiyxkmmHg2RRU9GgjHa_m1PnagrC1WvCzt8uzNt2Vy1-vWC_9jN14aDh1TJnLvZEjaa0hbE20YFlBgyDjPA4gMvamA1rTh05b2_37TvGIsQyAX0hi-iBQt0tHyaOdDCkOSk7qSYGY6fwyGc0Bbb3rbCsIdA",
-      category: "Music"
-    },
-    {
-      month: "OCT",
-      day: "30",
-      title: "Modern Canvas Workshop",
-      organizer: "Creative Collective",
-      location: "Art District Studio, Austin",
-      price: 120,
-      imageAlt: "Art workshop",
-      imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDdjq0rMLgN1E8ipoON4YXw7KFKW_L2kmGVZ-d9hnG4BalyHJpIYQ4FbgadrErPTSE6ADxw58faGZWJaPRXmJZ1g4aTN3mhGO3larQucJfJy_Kr5iLHntw1CxozOOzoI1bLQjmhpgXp2sHNZerN3AH0XBXIcpD33YqtCD6P3fIG5SAb_V9mMnP8urDT4HdL1M2TAJZvROFNg8t2YQ-ExAYDgWOZhtzDnPJNzllxheudhtmwUse8UE1ByhzXy7zKJ3n7CLAGgWZjc9U",
-      category: "Arts"
-    }
-  ];
-
-  const filteredEvents = useMemo(() => {
-    return eventsData.filter((event) => {
-      const matchesCategory = activeCategory === 'All' || event.category === activeCategory;
-      const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            event.organizer.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            event.location.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
-    });
-  }, [activeCategory, searchQuery]);
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const res = await fetch("/api/events");
+        const data = await res.json();
+        if (data.success) {
+          setFeaturedEvents(data.events.slice(0, 3)); 
+        }
+      } catch (err) {
+        console.error("Failed to load featured events");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFeatured();
+  }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f7f9fb] font-sans dark:bg-black">
-      <header className="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl shadow-sm">
-        <nav className="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-[#3525cd] text-2xl">Tkt</span>
-            <span className="text-2xl font-extrabold text-[#3525cd] tracking-tighter">Master</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link href="/login" className="text-slate-600 font-semibold hover:text-[#4d44e3] transition-colors">Login</Link>
-            <Link href="/signup" className="bg-[#3525cd] text-white px-5 py-2 rounded-xl font-semibold shadow-lg shadow-[#3525cd]/30 hover:bg-[#4d44e3] transition-colors">Sign Up</Link>
-          </div>
-        </nav>
-      </header>
+    <div className="flex flex-col min-h-screen bg-[#f7f9fb] font-sans">
+      <Navbar />
 
-      <main className="pt-32 pb-20 bg-white">
-        <section className="px-6 text-center max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-black leading-tight mb-4">
-            Discover Experiences That Matter.
+      <main className="pt-36 pb-20 bg-[#f7f9fb] flex-1">
+        <section className="px-6 text-center max-w-4xl mx-auto mb-24">
+          <h1 className="text-5xl md:text-7xl font-extrabold text-[#191c1e] leading-[1.1] mb-6 tracking-tight">
+            Experience the <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3525cd] to-[#4f46e5]">Next Generation</span> of Events.
           </h1>
-          <p className="text-slate-500 text-lg mb-10 max-w-xl mx-auto">
-            Book tickets to the best tech meetups, concerts, and workshops near you.
+          <p className="text-[#464555] text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+            Book tickets to the best tech meetups, concerts, and exclusive workshops near you—or become an organizer and host your own.
           </p>
-
-          {/* Search Bar with Integrated SVG Icon */}
-          <div className="relative w-full max-w-2xl mx-auto mb-12">
-            <div className="relative flex items-center  bg-white rounded-full p-2 shadow-xl border border-slate-100 dark:border-zinc-800">
-              
-              {/* MAGNIFYING GLASS ICON */}
-              <div className="pl-4 pr-1 flex items-center justify-center pointer-events-none">
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  strokeWidth={2} 
-                  stroke="currentColor" 
-                  className="w-5 h-5 text-slate-400"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                </svg>
-              </div>
-
-              <input 
-                className="w-full bg-transparent border-none focus:ring-0 text-slate-900  placeholder:text-slate-400 py-3 px-2 outline-none" 
-                placeholder="Search for events..." 
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              /> 
-
-              {searchQuery && (
-                <button
-                  className="mr-2 px-2 text-slate-400 hover:text-slate-600 transition-colors"
-                  onClick={() => setSearchQuery('')}
-                >
-                  <span className="material-symbols-outlined text-sm">close</span>
-                </button>
-              )}
-
-              <button className="bg-[#3525cd] text-white px-8 py-3 rounded-full font-bold hover:opacity-90 transition-all">
-                Search
-              </button>
-            </div>
-          </div>
-
-          <div className="flex justify-center gap-3 overflow-x-auto no-scrollbar mb-16">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`px-6 py-2 rounded-full font-medium transition-all ${
-                  activeCategory === category
-                    ? 'bg-[#3525cd] text-white shadow-md'
-                    : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-100'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
+          
+          <Link href="/explore" className="inline-flex items-center gap-2 bg-[#191c1e] text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-[#3525cd] hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300">
+            Start Exploring 
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </Link>
         </section>
 
-        <section className="px-6 max-w-xl mx-auto space-y-8">
-          <div className="flex justify-between items-center mb-2">
-            <h2 className="text-2xl font-bold text-black tracking-tight">
-              {searchQuery ? `Results for "${searchQuery}"` : "Featured Events"}
+        <section className="px-6 max-w-7xl mx-auto space-y-8">
+          <div className="flex justify-between items-end mb-8 border-b border-[#eceef0] pb-4">
+            <h2 className="text-3xl font-extrabold text-[#191c1e] tracking-tight">
+              Featured Events
             </h2>
-            
-            <Link href="/allEventsPage">
-              <div className="text-sm font-semibold text-[#3525cd] hover:text-[#4d44e3] transition-colors flex items-center gap-1 cursor-pointer">
-                View more 
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                </svg>
+            <Link href="/explore">
+              <div className="text-sm font-bold text-[#3525cd] hover:text-[#4d44e3] transition-colors flex items-center gap-1 group">
+                View all <span className="group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </Link>
           </div>
 
-          <div className="flex flex-col gap-8">
-            {filteredEvents.length > 0 ? (
-              filteredEvents.map((event, index) => (
-                <Eventcard
-                  key={index}
-                  month={event.month}
-                  day={event.day}
-                  title={event.title}
-                  organizer={event.organizer}
-                  location={event.location}
-                  price={event.price}
-                  imageAlt={event.imageAlt}
-                  imageUrl={event.imageUrl}
-                />
-              ))
-            ) : (
-              <div className="text-center py-20 text-[#777587]">
-                No events found in this category
-              </div>
-            )}
-          </div>
-
-          <div className="flex justify-center mt-6">
-            <Link href="/allEventsPage">
-              <button className="px-6 py-2 bg-[#3525cd] text-white rounded-full font-medium hover:opacity-90 transition-all shadow-lg shadow-indigo-500/10">
-                View all events
-              </button>
-            </Link>
-          </div>
+          {loading ? (
+            /* --- SKELETON LOADERS --- */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3].map((skeleton) => (
+                <div key={skeleton} className="bg-white rounded-3xl h-[380px] border border-[#eceef0] overflow-hidden animate-pulse">
+                  <div className="h-48 bg-slate-200 w-full"></div>
+                  <div className="p-6 space-y-4">
+                    <div className="h-6 bg-slate-200 rounded-md w-3/4"></div>
+                    <div className="h-4 bg-slate-200 rounded-md w-1/2"></div>
+                    <div className="h-12 bg-slate-200 rounded-xl w-full mt-6"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : featuredEvents.length > 0 ? (
+            /* --- REAL DATA --- */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featuredEvents.map((event, index) => (
+                <article key={event.id} className="bg-white rounded-3xl shadow-sm border border-[#eceef0] overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col">
+                  <div className="h-48 w-full overflow-hidden bg-slate-100 relative">
+                    {/* Cycling through the realistic Unsplash images based on index */}
+                    <img 
+                      src={placeholderImages[index % placeholderImages.length]} 
+                      alt={event.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-[#191c1e] shadow-sm">
+                      {new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    </div>
+                  </div>
+                  <div className="p-6 flex flex-col flex-grow">
+                    <h3 className="text-xl text-[#191c1e] font-bold line-clamp-1 mb-2">{event.title}</h3>
+                    <div className="flex items-center gap-2 text-sm text-[#464555] mb-6">
+                      <svg className="w-4 h-4 text-[#3525cd]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                      <span className="line-clamp-1">{event.location}</span>
+                    </div>
+                    
+                    <Link href={`/event/${event.id}`} className="mt-auto block w-full text-center py-3.5 bg-[#f2f4f6] text-[#191c1e] font-bold rounded-xl hover:bg-[#3525cd] hover:text-white transition-colors duration-300">
+                      View Details
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            /* --- EMPTY STATE --- */
+            <div className="text-center py-24 bg-white rounded-3xl border border-[#eceef0]">
+              <svg className="w-16 h-16 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+              <p className="text-[#464555] text-lg font-medium">No events currently active.</p>
+              <p className="text-slate-400 mt-1">Be the first to create one!</p>
+            </div>
+          )}
         </section>
       </main>
 
       <Footer />
-
-      <style jsx global>{`
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
     </div>
   );
 }

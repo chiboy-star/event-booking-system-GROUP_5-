@@ -19,10 +19,13 @@ export async function GET() {
     if (error || !user) throw new Error("Invalid token");
 
     // 3. Fetch their full profile from Prisma
+    // Inside app/api/user/route.ts, update the Prisma query to this:
     const dbUser = await prisma.user.findUnique({
       where: { id: user.id },
-      // Include the events they are organizing!
-      include: { events: true } 
+      include: { 
+        events: true, // If this is what you named your "created events" or "booked events"
+        // If you have a separate relation for booked tickets, add it here, e.g., attendedEvents: true 
+      } 
     });
 
     return NextResponse.json({ success: true, user: dbUser }, { status: 200 });

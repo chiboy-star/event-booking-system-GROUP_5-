@@ -1,8 +1,8 @@
-// middleware.ts
+// proxy.ts
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // Grab the secure cookie
   const token = request.cookies.get('sb-access-token')?.value;
 
@@ -14,7 +14,7 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// Only run this middleware on protected routes
+// Only run this proxy on protected routes
 export const config = {
   matcher: ['/dashboard/:path*'],
 };
